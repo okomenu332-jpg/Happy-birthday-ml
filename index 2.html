@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Sweet Girl</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    background: #141414;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ===== INTRO SCREEN ===== */
+  #intro {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeOut 0.8s ease 3.5s forwards;
+  }
+  #intro .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: #E50914;
+    letter-spacing: 8px;
+    opacity: 0;
+    transform: scale(0.5);
+    animation: logoIn 1.2s ease 0.3s forwards;
+    text-shadow: 0 0 30px rgba(229,9,20,0.6);
+  }
+  #intro .sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    letter-spacing: 6px;
+    color: #fff;
+    margin-top: 12px;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.5s forwards;
+  }
+  @keyframes logoIn {
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 0.9; }
+  }
+  @keyframes fadeOut {
+    to { opacity: 0; visibility: hidden; }
+  }
+
+  /* ===== PROFILE SCREEN ===== */
+  #profiles {
+    position: fixed;
+    inset: 0;
+    background: #141414;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 900;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  #profiles.show { opacity: 1; z-index: 950; }
+  #profiles h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 3rem;
+    font-weight: 400;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+  }
+  .profile-grid {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .profile:hover { transform: scale(1.08); }
+  .avatar {
+    width: 130px;
+    height: 130px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #E50914, #b0060f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 70px;
+    border: 3px solid transparent;
+    transition: border 0.2s;
+  }
+  .profile:hover .avatar { border: 3px solid #fff; }
+  .profile p {
+    margin-top: 12px;
+    font-size: 1.1rem;
+    color: #b3b3b3;
+  }
+  .profile:hover p { color: #fff; }
+
+  /* ===== MAIN PAGE ===== */
+  #main {
+    display: none;
+    padding-bottom: 60px;
+  }
+  #main.show { display: block; }
+
+  /* Navbar */
+  .navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 16px 40px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  .navbar .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: #E50914;
+    letter-spacing: 4px;
+  }
+  .navbar .links {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+    color: #e5e5e5;
+  }
+  .navbar .links span:hover { color: #b3b3b3; cursor: pointer; }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    height: 70vh;
+    min-height: 420px;
+    background: linear-gradient(135deg, #1a1a2e, #E50914 200%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px 40px;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #141414 10%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    letter-spacing: 4px;
+    position: relative;
+    z-index: 2;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+  }
+  .hero p {
+    position: relative;
+    z-index: 2;
+    font-size: 1.1rem;
+    color: #ddd;
+    max-width: 600px;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  .hero .play-btn {
+    position: relative;
+    z-index: 2;
+    margin-top: 20px;
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+  }
+  .hero .play-btn:hover { background: #ccc; }
+
+  /* Rows */
+  .row {
+    margin-top: 30px;
+    padding: 0 40px;
+  }
+  .row h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #e5e5e5;
+  }
+  .row-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+    scroll-behavior: smooth;
+  }
+  .row-scroll::-webkit-scrollbar { height: 6px; }
+  .row-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+  .row-scroll::-webkit-scrollbar-track { background: transparent; }
+
+  .tile {
+    flex: 0 0 280px;
+    cursor: pointer;
+    transition: transform 0.25s ease;
+    position: relative;
+  }
+  .tile:hover { transform: scale(1.06); z-index: 10; }
+  .tile img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+    background: #222;
+  }
+  .tile .title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px 12px;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    border-radius: 0 0 6px 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  .tile .play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    background: rgba(229,9,20,0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 20px;
+  }
+  .tile:hover .play-icon { opacity: 1; }
+
+  /* ===== VIDEO MODAL ===== */
+  #modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+  }
+  #modal.show { display: flex; }
+  #modal .player {
+    width: 100%;
+    max-width: 900px;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(229,9,20,0.4);
+    position: relative;
+  }
+  #modal iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  #modal .close {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    background: #E50914;
+    color: #fff;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #modal .close:hover { background: #b0060f; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 3rem; }
+    .hero { padding: 40px 20px; }
+    .navbar { padding: 12px 20px; }
+    .navbar .links { display: none; }
+    .row { padding: 0 20px; }
+    .tile { flex: 0 0 200px; }
+    .tile img { height: 120px; }
+    #profiles h1 { font-size: 2rem; }
+    .avatar { width: 100px; height: 100px; font-size: 50px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== INTRO ===== -->
+<div id="intro">
+  <div class="logo">OUR STORY</div>
+  <div class="sub">A NETFLIX ORIGINAL</div>
+</div>
+
+<!-- ===== PROFILES ===== -->
+<div id="profiles">
+  <h1>Who's watching?</h1>
+  <div class="profile-grid">
+    <div class="profile" onclick="enterMain()">
+      <div class="avatar">❤️</div>
+      <p>My Love</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div id="main">
+  <div class="navbar">
+    <div class="brand">OUR STORY</div>
+    <div class="links">
+      <span>Home</span>
+      <span>Memories</span>
+      <span>Us</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>My Sweet Girl</h1>
+    <p>A collection of moments, memories, and everything in between. Made just for you.</p>
+    <button class="play-btn" onclick="playVideo('GTW7uXW6Evs')">▶ Play</button>
+  </div>
+
+  <div class="row">
+    <h2>Our Memories</h2>
+    <div class="row-scroll" id="row1"></div>
+  </div>
+
+  <div class="row">
+    <h2>Watch It Again</h2>
+    <div class="row-scroll" id="row2"></div>
+  </div>
+
+  <div class="footer">
+    Made with ❤️ just for you.
+  </div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div id="modal">
+  <div class="player">
+    <button class="close" onclick="closeVideo()">✕</button>
+    <iframe id="videoFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+  const videos = [
+    { title: "Your Pretty Self",   id: "GTW7uXW6Evs" },
+    { title: "My Happy Space",     id: "rV5GtlXOLe8" },
+    { title: "Hot Mama",           id: "7tPsniEfZmM" },
+    { title: "We Grow Together",   id: "JBnNgrJm8uU" }
+  ];
+
+  // Build tiles
+  function makeTile(v) {
+    const tile = document.createElement('div');
+    tile.className = 'tile';
+    tile.onclick = () => playVideo(v.id);
+    tile.innerHTML = `
+      <img src="https://img.youtube.com/vi/${v.id}/maxresdefault.jpg"
+           onerror="this.src='https://img.youtube.com/vi/${v.id}/hqdefault.jpg'"
+           alt="${v.title}">
+      <div class="play-icon">▶</div>
+      <div class="title">${v.title}</div>
+    `;
+    return tile;
+  }
+
+  const row1 = document.getElementById('row1');
+  const row2 = document.getElementById('row2');
+  videos.forEach(v => row1.appendChild(makeTile(v)));
+  videos.forEach(v => row2.appendChild(makeTile(v)));
+
+  // Intro → profiles
+  setTimeout(() => {
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('profiles').classList.add('show');
+  }, 4300);
+
+  // Enter main
+  function enterMain() {
+    document.getElementById('profiles').style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('profiles').style.display = 'none';
+      document.getElementById('main').classList.add('show');
+      window.scrollTo(0, 0);
+    }, 600);
+  }
+
+  // Play video
+  function playVideo(id) {
+    const modal = document.getElementById('modal');
+    const frame = document.getElementById('videoFrame');
+    frame.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+    modal.classList.add('show');
+  }
+
+  // Close video
+  function closeVideo() {
+    const modal = document.getElementById('modal');
+    const frame = document.getElementById('videoFrame');
+    frame.src = '';
+    modal.classList.remove('show');
+  }
+
+  // Esc key closes
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeVideo();
+  });
+
+  // Click outside player closes
+  document.getElementById('modal').addEventListener('click', (e) => {
+    if (e.target.id === 'modal') closeVideo();
+  });
+</script>
+
+</body>
+</html>
